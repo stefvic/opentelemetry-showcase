@@ -1,0 +1,8 @@
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: loki-grafana-mapping
+spec:
+  prefix: /grafana
+  rewrite: ""
+  service: loki-grafana.loki:80

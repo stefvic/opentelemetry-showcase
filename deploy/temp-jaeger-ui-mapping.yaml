@@ -1,0 +1,8 @@
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: tempo-jaeger-ui-mapping
+spec:
+  prefix: /jaeger
+  rewrite: ""
+  service: tempo-tempo-distributed-query-frontend.loki:16686

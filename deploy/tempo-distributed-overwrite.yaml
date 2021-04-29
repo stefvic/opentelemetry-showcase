@@ -1,0 +1,19 @@
+traces:
+  jaeger:
+    # -- Enable Tempo to ingest Jaeger GRPC traces
+    grpc: true
+    # -- Enable Tempo to ingest Jaeger Thrift Binary traces
+    thriftBinary: true
+    # -- Enable Tempo to ingest Jaeger Thrift Compact traces
+    thriftCompact: true
+    # -- Enable Tempo to ingest Jaeger Thrift HTTP traces
+    thriftHttp: true
+  # -- Enable Tempo to ingest Zipkin traces
+  zipkin: false
+  otlp:
+    # -- Enable Tempo to ingest Open Telementry HTTP traces
+    http: true
+    # -- Enable Tempo to ingest Open Telementry GRPC traces
+    grpc: true
+  # -- Enable Tempo to ingest Open Census traces
+  opencensus: false

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: order-service
+  data:
+    cassandra:
+      schema-action: create_if_not_exists
+      request:
+        timeout: 5s
+  webflux:
+    base-path: /order

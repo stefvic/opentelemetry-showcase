@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -19,6 +20,7 @@ import reactor.util.annotation.NonNull;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrderHandler {
 
   private final OrderService orderService;
@@ -45,7 +47,9 @@ public class OrderHandler {
   private <T> void validate(T value) {
     Set<ConstraintViolation<T>> constraints = validator.validate(value);
     if (!constraints.isEmpty()) {
-      throw new ServerWebInputException(toString(constraints));
+      var violations = toString(constraints);
+      log.warn("Constraint violations: {}", violations);
+      throw new ServerWebInputException(violations);
     }
   }
 }

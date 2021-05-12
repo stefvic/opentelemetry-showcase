@@ -21,7 +21,8 @@ public class OrderService {
         .map(
             aOrder ->
                 new Order(new OrderKey(aOrder.getAccountId(), UUID.randomUUID().toString()))
-                    .setItem(aOrder.getItem()))
+                    .setItem(aOrder.getItem())
+                    .setNew(true))
         .doOnNext(orderRepository::save);
   }
 

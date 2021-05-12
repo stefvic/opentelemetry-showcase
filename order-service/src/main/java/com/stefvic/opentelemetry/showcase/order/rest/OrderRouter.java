@@ -12,6 +12,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration
 public class OrderRouter {
 
+  // Note: Web flux support @RestController, @ControllerAdvice, @ExceptionHandler too
+  // Functional way to export
   @Bean
   public RouterFunction<ServerResponse> route(OrderHandler orderHandler) {
     return RouterFunctions.route()

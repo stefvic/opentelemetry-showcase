@@ -18,6 +18,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(
     properties = {"spring.data.cassandra.schema-action: recreate"},
@@ -40,7 +41,9 @@ class OrderApplicationIntegrationTest {
     var accountId = "acc123";
     var orderId = UUID.randomUUID().toString();
     var item = "item1";
-    orderRepository.save(new Order(new OrderKey(accountId, orderId)).setItem(item)).block();
+    orderRepository
+        .save(new Order(new OrderKey(accountId, orderId)).setItem(item).setNew(true))
+        .block();
 
     this.client
         .get()
@@ -69,16 +72,36 @@ class OrderApplicationIntegrationTest {
         .doesNotExist()
         .jsonPath("$[0].new")
         .doesNotExist()
-        // TODO: why it's empty??
-        //        .jsonPath("$[0].createdBy")
-        //        .isEqualTo(OrderApplication.USER_PRINCIPAL)
-        //        .jsonPath("$[0].createdDate")
-        //        .isNotEmpty()
+        .jsonPath("$[0].createdBy")
+        .isEqualTo(OrderApplication.USER_PRINCIPAL)
+        .jsonPath("$[0].createdDate")
+        .isNotEmpty()
         .jsonPath("$[0].lastModifiedBy")
         .isEqualTo(OrderApplication.USER_PRINCIPAL)
         .jsonPath("$[0].lastModifiedDate")
         .isNotEmpty()
         .jsonPath("$[1]")
         .doesNotExist();
+  }
+
+  @Test
+  void shouldSaveOrderBadRequest() {
+    this.client
+        .post()
+        .uri("/order/api/v1/orders")
+        .body(BodyInserters.fromValue("{}"))
+        .header("Content-Type", "application/json")
+        .accept(APPLICATION_JSON)
+        .exchange()
+        .expectStatus()
+        .isBadRequest()
+        .expectHeader()
+        .contentType(APPLICATION_JSON)
+        .expectBody()
+        .consumeWith(
+            body ->
+                log.info(
+                    "Response body : {}",
+                    new String(requireNonNullElseGet(body.getResponseBody(), () -> new byte[0]))));
   }
 }

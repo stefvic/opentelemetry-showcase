@@ -7,12 +7,14 @@ import com.stefvic.opentelemetry.showcase.order.rest.AccountOrder;
 import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class OrderService {
   @NonNull private final OrderRepository orderRepository;
 
@@ -23,10 +25,15 @@ public class OrderService {
                 new Order(new OrderKey(aOrder.getAccountId(), UUID.randomUUID().toString()))
                     .setItem(aOrder.getItem())
                     .setNew(true))
-        .doOnNext(orderRepository::save);
+        .flatMap(orderRepository::save)
+        .doOnNext(order -> log.info("Order created successfully: {}", order));
   }
 
   public Flux<Order> findAll() {
     return orderRepository.findAll();
+  }
+
+  public Mono<Order> findByOrderKey(OrderKey orderKey) {
+      return orderRepository.findById(orderKey).single();
   }
 }

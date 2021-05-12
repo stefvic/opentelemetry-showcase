@@ -18,6 +18,10 @@ public class OrderRouter {
   public RouterFunction<ServerResponse> route(OrderHandler orderHandler) {
     return RouterFunctions.route()
         .GET("/api/v1/orders", accept(APPLICATION_JSON), orderHandler::findAll)
+        .GET(
+            "/api/v1/orders/{accountId}/{orderId}",
+            accept(APPLICATION_JSON),
+            orderHandler::findByOrderKey)
         .POST("/api/v1/orders", accept(APPLICATION_JSON), orderHandler::createOrder)
         .build();
   }

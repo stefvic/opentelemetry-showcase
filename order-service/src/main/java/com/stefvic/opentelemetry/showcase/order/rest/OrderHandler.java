@@ -1,9 +1,11 @@
 package com.stefvic.opentelemetry.showcase.order.rest;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.web.reactive.function.server.ServerResponse.created;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import com.stefvic.opentelemetry.showcase.order.entity.Order;
+import com.stefvic.opentelemetry.showcase.order.entity.OrderKey;
 import com.stefvic.opentelemetry.showcase.order.service.OrderService;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,12 +38,22 @@ public class OrderHandler {
   public Mono<ServerResponse> createOrder(@NonNull ServerRequest request) {
     Mono<AccountOrder> accountOrder =
         request.bodyToMono(AccountOrder.class).doOnNext(this::validate);
-    return ok().contentType(APPLICATION_JSON).body(orderService.create(accountOrder), Order.class);
+    var orderMono = orderService.create(accountOrder);
+    var ordersUri = request.uriBuilder().build();
+    return created(ordersUri).contentType(APPLICATION_JSON).body(orderMono, Order.class);
   }
 
   @NonNull
   public Mono<ServerResponse> findAll(@NonNull ServerRequest request) {
     return ok().contentType(APPLICATION_JSON).body(orderService.findAll(), Order.class);
+  }
+
+  @NonNull
+  public Mono<ServerResponse> findByOrderKey(@NonNull ServerRequest request) {
+    var accountId = request.pathVariable("accountId");
+    var orderId = request.pathVariable("orderId");
+    return ok().contentType(APPLICATION_JSON)
+        .body(orderService.findByOrderKey(new OrderKey(accountId, orderId)), Order.class);
   }
 
   private <T> void validate(T value) {

@@ -19,6 +19,7 @@ final class EmbeddedCassandraLifecycle {
   private static final String CASSANDRA_MAX_WAIT_MIN_ENV = "CASSANDRA_MAX_WAIT_MIN";
   private static final String CASSANDRA_VERSION_ENV = "CASSANDRA_VERSION";
   private static final int DEFAULT_WAIT_MIN = 3;
+  private static final int CASSANDRA_PORT = 9042;
 
   private EmbeddedCassandraLifecycle() {
     throw new UnsupportedOperationException("No instance");
@@ -37,7 +38,7 @@ final class EmbeddedCassandraLifecycle {
     try {
       log.info("Cassandra Lifecycle: Starting Embedded Cassandra server ...");
       var container = runCassandraContainer();
-      var port = container.getMappedPort(9042);
+      var port = container.getMappedPort(CASSANDRA_PORT);
       var host = container.getHost();
       // spring data cassandra overwrite
       System.setProperty("spring.data.cassandra.port", String.valueOf(port));
@@ -89,10 +90,7 @@ final class EmbeddedCassandraLifecycle {
   private static CassandraContainer<?> runCassandraContainer() {
 
     var container = new CassandraContainer<>(getCassandraDockerImageName());
-    container
-        .withReuse(true)
-        .withExposedPorts(9042)
-        .withStartupTimeout(Duration.ofMinutes(getWaitMin()));
+    container.withExposedPorts(CASSANDRA_PORT).withStartupTimeout(Duration.ofMinutes(getWaitMin()));
     container.start();
     return container;
   }

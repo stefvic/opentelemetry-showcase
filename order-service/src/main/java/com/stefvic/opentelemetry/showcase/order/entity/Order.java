@@ -1,5 +1,6 @@
 package com.stefvic.opentelemetry.showcase.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,8 +25,9 @@ import org.springframework.data.domain.Persistable;
 @Setter
 @Accessors(chain = true)
 @Table
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class Order implements Persistable<OrderKey> {
 
   @PrimaryKey

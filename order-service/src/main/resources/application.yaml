@@ -8,3 +8,30 @@ spring:
         timeout: 5s
   webflux:
     base-path: /order
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+  cloud:
+    stream:
+      function:
+        definition: builderOrders
+      bindings:
+        builderOrders-out-0:
+          group: orders
+          destination: builderOrders
+
+management:
+  health:
+    defaults:
+      enabled: true
+    binders:
+      enabled: true
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"

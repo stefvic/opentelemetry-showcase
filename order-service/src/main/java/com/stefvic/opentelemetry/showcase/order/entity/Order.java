@@ -30,26 +30,17 @@ import org.springframework.data.domain.Persistable;
 @ToString
 public class Order implements Persistable<OrderKey> {
 
-  @PrimaryKey
-  @NonNull
-  @JsonProperty(access = Access.READ_ONLY)
-  private final OrderKey orderKey;
+  @PrimaryKey @NonNull @JsonProperty private final OrderKey orderKey;
 
   private String item;
 
   @Transient @JsonIgnore private boolean isNew;
 
-  @CreatedBy
-  @JsonProperty(access = Access.READ_ONLY)
-  private String createdBy;
+  @CreatedBy @JsonProperty private String createdBy;
 
-  @CreatedDate
-  @JsonProperty(access = Access.READ_ONLY)
-  private Instant createdDate;
+  @CreatedDate @JsonProperty private Instant createdDate;
 
-  @LastModifiedBy
-  @JsonProperty(access = Access.READ_ONLY)
-  private String lastModifiedBy;
+  @LastModifiedBy @JsonProperty private String lastModifiedBy;
 
   @LastModifiedDate
   @JsonProperty(access = Access.READ_ONLY)

@@ -11,7 +11,9 @@ ext {
     versions = [
             springCloud   : '2020.0.2',
             testContainers: '1.15.3',
-            awaitility    : '4.1.0'
+            awaitility    : '4.1.0',
+            opentTelemetryApi: '1.2.0',
+            cassandraDriver: '4.11.1'
     ]
 }
 
@@ -23,9 +25,10 @@ subprojects {
 
     dependencyManagement {
         imports {
-            mavenBom "com.datastax.oss:java-driver-bom:4.11.1"
+            mavenBom "com.datastax.oss:java-driver-bom:${versions.cassandraDriver}"
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
             mavenBom "org.testcontainers:testcontainers-bom:${versions.testContainers}"
+            mavenBom "io.opentelemetry:opentelemetry-bom:${versions.opentTelemetryApi}"
         }
         dependencies {
             dependency "org.awaitility:awaitility:${versions.awaitility}"

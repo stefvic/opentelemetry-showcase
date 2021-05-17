@@ -1,7 +1,8 @@
 package com.stefvic.opentelemetry.showcase.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.NonNull;
@@ -14,16 +15,17 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 @Data
 @Accessors(chain = true)
 @PrimaryKeyClass
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderKey implements Serializable {
 
   @PrimaryKeyColumn(name = "account_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-  @JsonProperty(access = Access.READ_ONLY)
+  @JsonProperty
   @NonNull
   private final String accountId;
 
   @PrimaryKeyColumn(name = "order_id", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
-  @JsonProperty(access = Access.READ_ONLY)
+  @JsonProperty
   @NonNull
   private final String orderId;
 }

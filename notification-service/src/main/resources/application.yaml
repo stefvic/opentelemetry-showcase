@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: builder-service
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+  cloud:
+    stream:
+      function:
+        definition: orderNotify
+      bindings:
+        orderNotify-in-0:
+          group: orders
+          destination: notifyOrders
+
+management:
+  health:
+    defaults:
+      enabled: true
+    binders:
+      enabled: true
+    cassandra:
+      enabled: false
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"

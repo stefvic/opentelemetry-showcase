@@ -17,4 +17,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = 'opentelemetry-showcase'
+
+include 'common-service'
 include 'order-service'
+include 'builder-service'
+include 'notification-service'
+

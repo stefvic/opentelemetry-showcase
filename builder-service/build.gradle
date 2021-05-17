@@ -1,0 +1,27 @@
+dependencies {
+    implementation project(':common-service')
+
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+    implementation 'org.springframework.data:spring-data-cassandra'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'io.opentelemetry:opentelemetry-api'
+    implementation 'io.opentelemetry:opentelemetry-extension-annotations'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation('org.springframework.cloud:spring-cloud-stream') {
+        artifact {
+            name = "spring-cloud-stream"
+            extension = "jar"
+            type = "test-jar"
+            classifier = "test-binder"
+        }
+    }
+
+}
+
+
+

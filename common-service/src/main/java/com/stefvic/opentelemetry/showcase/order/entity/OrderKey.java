@@ -20,12 +20,12 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 public class OrderKey implements Serializable {
 
   @PrimaryKeyColumn(name = "account_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-  @JsonProperty
+  @JsonProperty("accountId")
   @NonNull
   private final String accountId;
 
   @PrimaryKeyColumn(name = "order_id", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
-  @JsonProperty
+  @JsonProperty("orderId")
   @NonNull
   private final String orderId;
 }

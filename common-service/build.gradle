@@ -1,0 +1,18 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+javadoc {
+    enabled = false
+}
+dependencies {
+    implementation 'org.springframework.data:spring-data-cassandra'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+}
+
+
+

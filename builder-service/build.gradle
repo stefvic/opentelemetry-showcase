@@ -1,3 +1,7 @@
+plugins {
+    id 'com.google.cloud.tools.jib'
+}
+
 dependencies {
     implementation project(':common-service')
 
@@ -22,6 +26,31 @@ dependencies {
     }
 
 }
+
+bootRun {
+    main = 'com.stefvic.opentelemetry.showcase.builder.BuilderApplication'
+    systemProperties System.properties
+}
+
+jib {
+    from {
+        image = 'adoptopenjdk/openjdk16:latest'
+    }
+
+
+    to {
+        image = "registry.hub.docker.com/stefvic/${project.name}:${parent.version}"
+    }
+
+    container {
+        mainClass = 'com.stefvic.opentelemetry.showcase.builder.BuilderApplication'
+        jvmFlags = [
+                '-Duser.timezone=UTC'
+        ]
+    }
+}
+tasks.build.dependsOn('jib')
+
 
 
 

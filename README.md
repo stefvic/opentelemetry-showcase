@@ -24,3 +24,9 @@ kubectl edit deployments.apps -n loki tempo-tempo-distributed-query-frontend
 #   to           - --query.base-path=/jaeger
 kubectl apply -n loki -f temp-jaeger-ui-mapping.yaml
 ```
+
+
+## Build
+```shell
+./gradlew clean build
+```

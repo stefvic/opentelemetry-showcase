@@ -17,6 +17,8 @@ spring:
         builderOrderAndNotify-in-0:
           group: orders
           destination: builderOrders
+#server:
+#  port: 9092
 
 management:
   health:

@@ -14,7 +14,8 @@ spring:
         orderNotify-in-0:
           group: orders
           destination: notifyOrders
-
+#server:
+#  port: 9091
 management:
   health:
     defaults:

@@ -60,6 +60,10 @@ export RABBITMQ_PASSWORD=$(kubectl get secret --namespace rabbitmq rabbitmq -o j
 kubectl create secret generic -n opentelemetry-showcase rabbitmq --from-literal=username=user --from-literal=password="$RABBITMQ_PASSWORD"
 ```
 
+## Install k8s auto tracing admission controller webhook
+[autotracing-admission-controller-webhook](autotracing-admission-controller-webhook)
+
+
 ## Cassandra info
 ```shell
 Cassandra can be accessed through the following URLs from within the cluster:

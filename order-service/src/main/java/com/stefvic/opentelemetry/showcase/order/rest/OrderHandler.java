@@ -7,6 +7,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 import com.stefvic.opentelemetry.showcase.order.entity.Order;
 import com.stefvic.opentelemetry.showcase.order.entity.OrderKey;
 import com.stefvic.opentelemetry.showcase.order.service.OrderService;
+import io.opentelemetry.api.trace.Span;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
@@ -25,6 +26,7 @@ import reactor.util.annotation.NonNull;
 @Slf4j
 public class OrderHandler {
 
+  private static final String TRACE_ID = "TraceID";
   private final OrderService orderService;
   private final Validator validator;
 
@@ -40,12 +42,17 @@ public class OrderHandler {
         request.bodyToMono(AccountOrder.class).doOnNext(this::validate);
     var orderMono = orderService.create(accountOrder);
     var ordersUri = request.uriBuilder().build();
-    return created(ordersUri).contentType(APPLICATION_JSON).body(orderMono, Order.class);
+    return created(ordersUri)
+        .contentType(APPLICATION_JSON)
+        .header(TRACE_ID, Span.current().getSpanContext().getTraceId())
+        .body(orderMono, Order.class);
   }
 
   @NonNull
   public Mono<ServerResponse> findAll(@NonNull ServerRequest request) {
-    return ok().contentType(APPLICATION_JSON).body(orderService.findAll(), Order.class);
+    return ok().contentType(APPLICATION_JSON)
+        .header(TRACE_ID, Span.current().getSpanContext().getTraceId())
+        .body(orderService.findAll(), Order.class);
   }
 
   @NonNull
@@ -53,6 +60,7 @@ public class OrderHandler {
     var accountId = request.pathVariable("accountId");
     var orderId = request.pathVariable("orderId");
     return ok().contentType(APPLICATION_JSON)
+        .header(TRACE_ID, Span.current().getSpanContext().getTraceId())
         .body(orderService.findByOrderKey(new OrderKey(accountId, orderId)), Order.class);
   }
 

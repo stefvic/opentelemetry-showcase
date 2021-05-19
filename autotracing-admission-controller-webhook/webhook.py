@@ -55,10 +55,10 @@ def edit_env(container):
       'name': key,
       'value': val
     })
-  # env.append({
-  #     'name': 'JAEGER_SERVICE_NAME',
-  #     'value': container['name']
-  # })
+  env.append({
+      'name': 'OTEL_RESOURCE_ATTRIBUTES',
+      'value': 'service.name=' + container['name']
+  })
 
   add_java_agent(env)
 

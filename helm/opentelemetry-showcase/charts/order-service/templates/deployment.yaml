@@ -70,12 +70,18 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /actuator/order/health/liveness
+              path: /order/actuator/health/liveness
               port: http
           readinessProbe:
             httpGet:
-              path: /actuator/order/health/readiness
+              path: /order/actuator/health/readiness
               port: http
+          startupProbe:
+            httpGet:
+              path: /order/actuator/health/liveness
+              port: http
+            initialDelaySeconds: 5
+            failureThreshold: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

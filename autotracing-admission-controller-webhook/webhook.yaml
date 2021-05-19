@@ -1,0 +1,75 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auto-tracing-mutating-webhook
+  labels:
+    app: auto-tracing-mutating-webhook
+spec:
+  publishNotReadyAddresses: true
+  ports:
+    - port: 443
+      targetPort: 5000
+  selector:
+    app: auto-tracing-mutating-webhook
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auto-tracing-mutating-webhook
+  labels:
+    app: auto-tracing-mutating-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auto-tracing-mutating-webhook
+  template:
+    metadata:
+      name: auto-tracing-mutating-webhook
+      labels:
+        app: auto-tracing-mutating-webhook
+    spec:
+      containers:
+        - name: auto-tracing-mutating-webhook
+          image: stefvic/auto-tracing-webhook:latest
+          imagePullPolicy: Always
+          env:
+          - name: OTEL_TRACES_EXPORTER
+            value: "otlp"
+          - name: OTEL_METRICS_EXPORTER
+            value: "otlp"
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: "http://tempo-tempo-distributed-distributor.loki:4317"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 250m
+              memory: 64Mi
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: auto-tracing-mutating-webhook
+  labels:
+    app: auto-tracing-mutating-webhook
+webhooks:
+  - name: auto-tracing-mutating-webhook.default.svc.cluster.local
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMyakNDQWNJQ0NRRFFkZmtYemlCSEl6QU5CZ2txaGtpRzl3MEJBUXNGQURBdk1TMHdLd1lEVlFRRERDUkIKWkcxcGMzTnBiMjRnUTI5dWRISnZiR3hsY2lCWFpXSm9iMjlySUVSbGJXOGdRMEV3SGhjTk1qRXdOVEU0TWpBegpNVEl5V2hjTk5EZ3hNREF6TWpBek1USXlXakF2TVMwd0t3WURWUVFERENSQlpHMXBjM05wYjI0Z1EyOXVkSEp2CmJHeGxjaUJYWldKb2IyOXJJRVJsYlc4Z1EwRXdnZ0VpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCRHdBd2dnRUsKQW9JQkFRRFlGQ1laQnJUME40V3Z3SHlJOUdrQ3diTHdSQ1pGRStIRGhzRmZIWlE2cENTbTdtOHZJVVJCTmhuSAo5VzdJdnFPQlpvdVIybDg2aHFpZkRpc0VJaElLb0RPUzdtRGljQjQ1ME1NK1M1bjgyYTNmcUhCZytDMmo0UllHCmxKL3M0QmI0V1hmWHljTThTQ2tOVTBHOE5BT241YXh1aWhpdnJvZ3VSbkY1QnFaZzJ5WE5LbU9hUktsbXVTdkgKa2tlbHBlVHRXUkRsOGI5QjVlanFIaloxcyt1aHdYNGRRRHkzb0FYVEo0eFdCVVRQZEZRWFdHdWNhVllZdEJZMQpqajA5cCtpTVNMY3lRMFY5NFJjcXRocXppN0c4K1lUTVA1VlowQ09GSXNzQkYzWERVWm5hY21YcUFkdjIrNnZjCmZCc0xzaU5ISTBObWNqT0s2eEZmN1hnTElOazlBZ01CQUFFd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFINTgKb2ZOMWpRQWxkNzNiZkFEV2RKa3RRNWRIWEw4bjA0SEpIRXk0cjRiNW5NTEVKU1lnMmYyU2pRc2pRZjlvWmtmaAoxSjFkQjgvQnBlSmdEZllHQ3ZLa3NHcENFb2RXcy93bkphM090Z0FQLy81WFZCRjNLZEJndXR6c01pRHFvVnFsCmdVTzA5aWRSL0luYXUycDhXcGw5QXVDdlZrVi82SkxqZldRSWg2Y3FMdDFBM2hJS3k2SnM3UmM5YVcxR0lDbk8KaVRoOXk1VEo1cnlaVkJrT2dzakNEQWdTdFk4LzZqVG5vaGdmdVU0S2t5aUtxVzV3TDd6U0Y3Vkw0WVlYdzl2cgpaaGhacThXZlVrUVF5eVI0Z1NYeUxYYzhraHBFUmNhV1dldnlSdStKK1V2QUc4MnNYNmZYYkF2Nmg4a2h6SXhoCnNwRElkQ1FmbWp2L2VnemNYQmM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      service:
+        name: auto-tracing-mutating-webhook
+        namespace: default
+        path: "/decorate"
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    failurePolicy: Fail
+    namespaceSelector:
+      matchLabels:
+        autotrace: enabled

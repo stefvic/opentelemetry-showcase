@@ -6,6 +6,8 @@ spring:
       schema-action: create_if_not_exists
       request:
         timeout: 5s
+      local-datacenter: datacenter1
+      keyspace-name: opentelemetry
   webflux:
     base-path: /order
 

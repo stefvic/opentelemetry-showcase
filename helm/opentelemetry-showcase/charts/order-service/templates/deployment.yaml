@@ -33,17 +33,48 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SPRING_DATA_CASSANDRA_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cassandra.secret }}
+                  key: username
+            - name: SPRING_DATA_CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cassandra.secret }}
+                  key: password
+            - name: SPRING_DATA_CASSANDRA_KEYSPACE-NAME
+              value: {{ .Values.cassandra.keyspace | quote }}
+            - name: SPRING_DATA_CASSANDRA_CONTACT-POINTS
+              value: {{ .Values.cassandra.endpoints | quote }}
+            - name: SPRING_DATA_CASSANDRA_LOCAL-DATACENTER
+              value: {{ .Values.cassandra.datacenter | quote}}
+            - name: SPRING_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.rabbitmq.secret }}
+                  key: username
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.rabbitmq.secret }}
+                  key: password
+            - name: SPRING_RABBITMQ_HOST
+              value: {{ .Values.rabbitmq.host | quote }}
+            - name: SPRING_RABBITMQ_PORT
+              value: {{ .Values.rabbitmq.port | quote }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /actuator/liveness
+              path: /actuator/order/health/liveness
               port: http
           readinessProbe:
             httpGet:
-              path: /actuator/readiness
+              path: /actuator/order/health/readiness
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

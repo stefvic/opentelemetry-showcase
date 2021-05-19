@@ -25,7 +25,7 @@ prometheus:
       enabled: false
 loki:
   persistence:
-    enabled: true
+    enabled: false
     storageClassName: "standard"
     size: "5Gi"
 promtail:

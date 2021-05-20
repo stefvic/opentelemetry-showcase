@@ -9,11 +9,12 @@ version = '1.0.0'
 
 ext {
     versions = [
-            springCloud   : '2020.0.2',
-            testContainers: '1.15.3',
-            awaitility    : '4.1.0',
+            springCloud      : '2020.0.2',
+            rabbitMQ         : '5.12.0',
+            testContainers   : '1.15.3',
+            awaitility       : '4.1.0',
             opentTelemetryApi: '1.2.0',
-            cassandraDriver: '4.11.1'
+            cassandraDriver  : '4.11.1'
     ]
 }
 
@@ -32,6 +33,7 @@ subprojects {
         }
         dependencies {
             dependency "org.awaitility:awaitility:${versions.awaitility}"
+            dependency "com.rabbitmq:amqp-client:${versions.rabbitMQ}"
         }
     }
 

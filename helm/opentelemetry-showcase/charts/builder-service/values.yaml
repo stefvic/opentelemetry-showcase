@@ -4,10 +4,8 @@
 
 replicaCount: 1
 
-rabbitmq:
-  secret: rabbitmq
-  host: rabbitmq.rabbitmq.svc
-  port: 5672
+kafka:
+  bootstrapServers: kafka.kafka.svc:9092
 
 image:
   repository: stefvic/builder-service

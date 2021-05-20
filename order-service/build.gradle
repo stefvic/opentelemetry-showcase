@@ -10,7 +10,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
-    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
     implementation 'io.opentelemetry:opentelemetry-api'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -21,7 +21,7 @@ dependencies {
 
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:cassandra'
-    testImplementation 'org.testcontainers:rabbitmq'
+    testImplementation 'org.testcontainers:kafka'
 
     testImplementation 'org.awaitility:awaitility'
 }

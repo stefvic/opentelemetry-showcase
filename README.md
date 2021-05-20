@@ -51,6 +51,12 @@ helm install rabbitmq bitnami/rabbitmq -n rabbitmq --set persistence.enabled=fal
 helm upgrade -i opentelemetry-showcase hub/opentelemetry-showcase -n opentelemetry-showcase --version "1.0.0"
 ```
 
+## Install kafka
+```shell
+kubectl create namespace kafka
+helm install kafka bitnami/kafka -n kafka --set persistence.enabled=false --set zookeeper.persistence.enabled=false
+```
+
 ## Create secrets
 ```shell
 export CASSANDRA_PASSWORD=$(kubectl get secret --namespace "cassandra" cassandra -o jsonpath="{.data.cassandra-password}" | base64 --decode)
@@ -127,3 +133,31 @@ To Access the RabbitMQ Management interface:
     kubectl port-forward --namespace rabbitmq svc/rabbitmq 15672:15672
 ```
 
+## Kafka info
+```shell
+Kafka can be accessed by consumers via port 9092 on the following DNS name from within your cluster:
+
+    kafka.kafka.svc.cluster.local
+
+Each Kafka broker can be accessed by producers via port 9092 on the following DNS name(s) from within your cluster:
+
+    kafka-0.kafka-headless.kafka.svc.cluster.local:9092
+
+To create a pod that you can use as a Kafka client run the following commands:
+
+    kubectl run kafka-client --restart='Never' --image docker.io/bitnami/kafka:2.8.0-debian-10-r0 --namespace kafka --command -- sleep infinity
+    kubectl exec --tty -i kafka-client --namespace kafka -- bash
+
+    PRODUCER:
+        kafka-console-producer.sh \
+            
+            --broker-list kafka-0.kafka-headless.kafka.svc.cluster.local:9092 \
+            --topic test
+
+    CONSUMER:
+        kafka-console-consumer.sh \
+            
+            --bootstrap-server kafka.kafka.svc.cluster.local:9092 \
+            --topic test \
+            --from-beginning
+```

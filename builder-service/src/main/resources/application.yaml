@@ -2,9 +2,8 @@ spring:
   application:
     name: builder-service
 
-  rabbitmq:
-    host: localhost
-    port: 5672
+  kafka:
+    bootstrap-servers: localhost:9093
 
   cloud:
     stream:

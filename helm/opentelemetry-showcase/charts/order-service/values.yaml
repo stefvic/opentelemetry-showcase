@@ -10,10 +10,8 @@ cassandra:
   endpoints: cassandra.cassandra.svc:9042
   datacenter: datacenter1
 
-rabbitmq:
-  secret: rabbitmq
-  host: rabbitmq.rabbitmq.svc
-  port: 5672
+kafka:
+  bootstrapServers: kafka.kafka.svc:9092
 
 
 image:

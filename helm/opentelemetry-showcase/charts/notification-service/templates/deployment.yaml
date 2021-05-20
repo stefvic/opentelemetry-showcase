@@ -34,20 +34,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: SPRING_RABBITMQ_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.rabbitmq.secret }}
-                  key: username
-            - name: SPRING_RABBITMQ_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.rabbitmq.secret }}
-                  key: password
-            - name: SPRING_RABBITMQ_HOST
-              value: {{ .Values.rabbitmq.host | quote }}
-            - name: SPRING_RABBITMQ_PORT
-              value: {{ .Values.rabbitmq.port | quote }}
+            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+              value: {{ .Values.kafka.bootstrapServers | quote }}
           ports:
             - name: http
               containerPort: 8080

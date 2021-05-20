@@ -35,9 +35,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.testcontainers.containers.RabbitMQContainer;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -57,13 +58,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 class OrderApplicationIntegrationTest {
 
-  private static final int RABBIT_MQ_PORT = 5672;
-  private static final int RABBIT_MQ_MGMT_PORT = 15672;
   // will be shared between test methods
   @Container
-  private static final RabbitMQContainer RABBIT_MQ =
-      new RabbitMQContainer("rabbitmq:management-alpine")
-          .withExposedPorts(RABBIT_MQ_PORT, RABBIT_MQ_MGMT_PORT);
+  private static final KafkaContainer KAFKA =
+      new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:5.4.4"))
+          .withExposedPorts(KafkaContainer.KAFKA_PORT);
 
   @Autowired private WebTestClient client;
   @Autowired private ObjectMapper objectMapper;
@@ -88,13 +87,11 @@ class OrderApplicationIntegrationTest {
 
   @BeforeAll
   static void beforeAll() {
-    var mqHost = RABBIT_MQ.getHost();
-    var mqPort = RABBIT_MQ.getMappedPort(RABBIT_MQ_PORT);
-    log.info("RabbitMQ: {}:{}", mqHost, mqPort);
-    log.info("RabbitMQ mgmt port: {}", RABBIT_MQ.getMappedPort(RABBIT_MQ_MGMT_PORT));
+    var kafkaHost = KAFKA.getHost();
+    var kafkaPort = KAFKA.getMappedPort(KafkaContainer.KAFKA_PORT);
+    log.info("Kafka: {}:{}", kafkaHost, kafkaPort);
 
-    System.setProperty("spring.rabbitmq.host", "" + mqHost);
-    System.setProperty("spring.rabbitmq.port", "" + mqPort);
+    System.setProperty("spring.kafka.bootstrap-servers", "" + kafkaHost + ":" + kafkaPort);
   }
 
   @BeforeEach

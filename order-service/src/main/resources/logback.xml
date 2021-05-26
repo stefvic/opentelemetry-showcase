@@ -7,11 +7,11 @@
     </encoder>
   </appender>
 
-  <logger name="org.springframework" level="info"/>
-  <logger name="org.apache.cassandra" level="error"/>
-  <logger name="com.datastax.driver.core" level="error"/>
+  <logger name="org.springframework" level="debug"/>
+  <logger name="org.apache.cassandra" level="debug"/>
+  <logger name="com.datastax.driver.core" level="debug"/>
 
-  <root level="info">
+  <root level="debug">
     <appender-ref ref="console"/>
   </root>
 

@@ -28,6 +28,9 @@ dependencies {
 
 bootRun {
     main = 'com.stefvic.opentelemetry.showcase.order.OrderApplication'
+    if ( project.hasProperty('jvmArgs') ) {
+        jvmArgs = (project.jvmArgs.split("\\s+") as List)
+    }
     systemProperties System.properties
 }
 

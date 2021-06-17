@@ -9,11 +9,11 @@ version = '1.0.0'
 
 ext {
     versions = [
-            springCloud      : '2020.0.2',
+            springCloud      : '2020.0.3',
             rabbitMQ         : '5.12.0',
             testContainers   : '1.15.3',
             awaitility       : '4.1.0',
-            opentTelemetryApi: '1.2.0',
+            opentTelemetryApi: '1.3.0',
             cassandraDriver  : '4.11.1'
     ]
 }

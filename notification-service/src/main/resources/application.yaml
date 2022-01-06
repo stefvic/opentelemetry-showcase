@@ -7,9 +7,9 @@ spring:
     port: 5672
 
   cloud:
+    function:
+      definition: orderNotify
     stream:
-      function:
-        definition: orderNotify
       bindings:
         orderNotify-in-0:
           group: orders

@@ -16,9 +16,9 @@ spring:
     port: 5672
 
   cloud:
+    function:
+      definition: builderOrders
     stream:
-      function:
-        definition: builderOrders
       bindings:
         builderOrders-out-0:
           group: orders

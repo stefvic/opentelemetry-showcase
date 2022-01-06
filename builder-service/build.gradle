@@ -29,13 +29,13 @@ dependencies {
 }
 
 bootRun {
-    main = 'com.stefvic.opentelemetry.showcase.builder.BuilderApplication'
+    mainClass.set('com.stefvic.opentelemetry.showcase.builder.BuilderApplication')
     systemProperties System.properties
 }
 
 jib {
     from {
-        image = 'adoptopenjdk/openjdk16:latest'
+        image = 'eclipse-temurin:17'
     }
 
 

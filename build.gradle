@@ -9,12 +9,12 @@ version = '1.1.0'
 
 ext {
     versions = [
-            springCloud      : '2021.0.0',
-            rabbitMQ         : '5.14.1',
-            testContainers   : '1.16.2',
-            awaitility       : '4.1.1',
-            opentTelemetryApi: '1.10.0',
-            cassandraDriver  : '4.13.0'
+            springCloud      : '2021.0.2',
+            rabbitMQ         : '5.14.2',
+            testContainers   : '1.17.2',
+            awaitility       : '4.2.0',
+            opentTelemetryApi: '1.14.0',
+            cassandraDriver  : '4.14.1'
     ]
 }
 
